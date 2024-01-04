@@ -1,5 +1,9 @@
 # Identity provider for testing purposes
-
+## настройка локального окружения
+```bash
+# пересборка приложения и поднятие докера
+$ make rebuild
+```
 ## Схема взаимодействия с бекендом авторизации
 see https://www.plantuml.com/plantuml/uml/
 ```plantuml

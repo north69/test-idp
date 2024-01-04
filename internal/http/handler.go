@@ -1,9 +1,9 @@
-package app
+package http
 
 import (
 	"github.com/labstack/echo/v4"
-	"test-idp/internal/app/openid/handler/configuration"
-	"test-idp/internal/app/status"
+	"test-idp/internal/http/openid/handler/configuration"
+	"test-idp/internal/http/status"
 )
 
 type Handler struct {
