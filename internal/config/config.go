@@ -18,6 +18,7 @@ type Db struct {
 
 type App struct {
 	HttpPort string `envconfig:"APP_HTTP_PORT" validate:"required"`
+	BaseUrl  string `envconfig:"APP_BASE_URL" validate:"required"`
 }
 
 type Config struct {
@@ -41,4 +42,8 @@ func Parse() (*Config, error) {
 	}
 
 	return &cnf, nil
+}
+
+func (app *App) BaseHref() string {
+	return "http://" + app.BaseUrl
 }

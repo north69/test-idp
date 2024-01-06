@@ -3,78 +3,54 @@ package configuration
 import (
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"test-idp/internal/config"
 )
 
-func Handle(c echo.Context) error {
+const (
+	openidIssuerUrl            = "/auth/openid/"
+	authorizeUrl               = "/auth/openid/authorize/"
+	tokenUrl                   = "/auth/openid/token/"
+	checkSessionUrl            = "/auth/openid/check_session/"
+	logoutUrl                  = "/auth/openid/logout/"
+	publicKeysUrl              = "/auth/openid/.well-known/jwks.json"
+	scopeOpenid                = "openid"
+	scopeUser                  = "user"
+	responseTypeCode           = "code"
+	authorizationCodeGrantType = "authorization_code"
+	refreshTokenGrantType      = "refresh_token"
+	resourceOwnerPassword      = "password"
+)
+
+type Handler struct {
+	cnf *config.Config
+}
+
+func Init(cnf *config.Config) *Handler {
+	return &Handler{
+		cnf: cnf,
+	}
+}
+
+func (h Handler) Handle(c echo.Context) error {
+	baseHref := h.cnf.App.BaseHref()
 	configuration := Configuration{
-		Issuer: "",
+		Issuer:                 baseHref + openidIssuerUrl,
+		AuthorizationEndpoint:  baseHref + authorizeUrl,
+		TokenEndpoint:          baseHref + tokenUrl,
+		CheckSessionIframe:     baseHref + checkSessionUrl,
+		EndSessionEndpoint:     baseHref + logoutUrl,
+		JWKSUri:                baseHref + publicKeysUrl,
+		ScopesSupported:        []string{scopeOpenid, scopeUser},
+		ResponseTypesSupported: []string{responseTypeCode},
+		ResponseModesSupported: []string{"form_post"},
+		GrantTypesSupported:    []string{authorizationCodeGrantType, refreshTokenGrantType, resourceOwnerPassword},
+		SubjectTypesSupported:  []string{"public"},
+		TokenEndpointAuthSigningAlgValuesSupported: []string{"ES512"},
+		IdTokenSigningAlgValuesSupported:           []string{"ES512"},
+		ClaimsSupported:                            []string{"issuer", "id", "subject", "audience", "issued_at", "expiration_time"},
+		TokenEndpointAuthMethodsSupported:          []string{"client_secret_post"},
+		DisplayValuesSupported:                     []string{"page"},
 	}
 
 	return c.JSON(http.StatusOK, configuration)
 }
-
-//[
-//                'issuer'                                           => Dictionary::getIssuerUrl(),
-//                'authorization_endpoint'                           => $base_href . Authorize::URL,
-//                'token_endpoint'                                   => $base_href . Token::URL,
-//                'check_session_iframe'                             => $base_href . CheckSession::URL,
-//                'end_session_endpoint'                             => $base_href . Logout::URL,
-//                'jwks_uri'                                         => $base_href . PublicKeys::URL,
-//                'scopes_supported'                                 => [
-//                    Dictionary::SCOPE_OPENID,
-//                    Dictionary::SCOPE_PROFILE,
-//                    Dictionary::SCOPE_FIRM,
-//                ],
-//                'response_types_supported'                         => [
-//                    Code::RESPONSE_TYPE,
-//                ],
-//                'response_modes_supported'                         => [
-//                    'form_post',
-//                ],
-//                'grant_types_supported'                            => [
-//                    AuthorizationCode::GRANT_TYPE,
-//                    RefreshToken::GRANT_TYPE,
-//                    ResourceOwnerPassword::GRANT_TYPE,
-//                ],
-//                'subject_types_supported'                          => [
-//                    'public',
-//                ],
-//                'token_endpoint_auth_signing_alg_values_supported' => [
-//                    'ES512',
-//                    'ES384',
-//                    'ES256',
-//                    'RS512',
-//                    'RS384',
-//                    'RS256',
-//                ],
-//                'id_token_signing_alg_values_supported'            => [
-//                    'ES512',
-//                    'ES384',
-//                    'ES256',
-//                    'RS512',
-//                    'RS384',
-//                    'RS256',
-//                ],
-//                'claims_supported'                                 => [
-//                    JwtToken\RegisteredClaims::ISSUER,
-//                    JwtToken\RegisteredClaims::ID,
-//                    JwtToken\RegisteredClaims::SUBJECT,
-//                    JwtToken\RegisteredClaims::AUDIENCE,
-//                    JwtToken\RegisteredClaims::ISSUED_AT,
-//                    JwtToken\RegisteredClaims::EXPIRATION_TIME,
-//                    Dictionary::JWT_CLAIM_TYPE,
-//                    Dictionary::JWT_CLAIM_SCOPE,
-//                    Dictionary::JWT_CLAIM_AUTH_TIME,
-//                    Dictionary::JWT_CLAIM_NONCE,
-//                ],
-//                'token_endpoint_auth_methods_supported'            => [
-//                    'client_secret_post',
-//                ],
-//                'display_values_supported'                         => [
-//                    'page',
-//                ],
-//
-//                // Reserved for the future
-//                // 'userinfo_endpoint'     => null,
-//                // 'registration_endpoint' => null,
-//            ],

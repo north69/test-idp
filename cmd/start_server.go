@@ -13,7 +13,7 @@ func startServerCmd(cnf *config.Config) *cobra.Command {
 		Short: "start-server",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			s := echo.New()
-			h := http.NewHandler(s)
+			h := http.NewHandler(s, cnf)
 			h.InitRoutes()
 
 			errCh := make(chan error)

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ant-design-vue/1.6.5/antd.min.js"></script>
+    <!--todo обновить на новую версию-->
+    <!--    <script src="https://unpkg.com/vue@3.4.5/dist/vue.global.prod.js"></script>-->
+    <!--    <script src="https://unpkg.com/ant-design-vue@4.1.0/dist/antd.min.js"></script>-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ant-design-vue/1.6.5/antd.min.css">
+</head>
+<body>
+<div id="app">
+    <div>
+        <a-layout :style="{height:'100vh'}">
+            <a-layout-content>
+                <a-row :style="{height:'100vh'}" type="flex" justify="space-around" align="middle">
+                    <a-col :span="9"></a-col>
+                    <a-col class="height-50" :span="6">
+                        <h1 align="center">test ID</h1>
+                        <a-form
+                                id="components-form-demo-normal-login"
+                                :form="form"
+                                class="login-form"
+                                @submit="handleSubmit"
+                        >
+                            <a-form-item>
+                                <a-input
+                                        v-decorator="['userName', { rules: [{ required: true, message: 'Please input your username!' }] },]"
+                                        placeholder="Username"
+                                >
+                                    <a-icon slot="prefix" type="user" style="color: rgba(0,0,0,.25)" />
+                                </a-input>
+                            </a-form-item>
+                            <a-form-item>
+                                <a-input
+                                        v-decorator="['password',{ rules: [{ required: true, message: 'Please input your Password!' }] },]"
+                                        type="password"
+                                        placeholder="Password"
+                                >
+                                    <a-icon slot="prefix" type="lock" style="color: rgba(0,0,0,.25)" />
+                                </a-input>
+                            </a-form-item>
+                            <a-form-item>
+                                <a-checkbox v-decorator="['remember',{valuePropName: 'checked',initialValue: true,},]">
+                                    Remember me
+                                </a-checkbox>
+                                <a class="login-form-forgot" href="">
+                                    Forgot password
+                                </a>
+                                <a-button type="primary" html-type="submit" class="login-form-button">
+                                    Log in
+                                </a-button>
+                                Or
+                                <a href="">register now!</a>
+                            </a-form-item>
+                        </a-form>
+                    </a-col>
+                    <a-col :span="9"></a-col>
+                </a-row>
+
+            </a-layout-content>
+        </a-layout>
+
+    </div>
+</div>
+<style>
+    #components-form-demo-normal-login .login-form {
+        max-width: 300px;
+    }
+    #components-form-demo-normal-login .login-form-forgot {
+        float: right;
+    }
+    #components-form-demo-normal-login .login-form-button {
+        width: 100%;
+    }
+</style>
+<script type="text/javascript" defer>
+    var Main = {
+        beforeCreate() {
+            this.form = this.$form.createForm(this, { name: 'normal_login' });
+        },
+        methods: {
+            handleSubmit(e) {
+                e.preventDefault();
+                this.form.validateFields((err, values) => {
+                    if (!err) {
+                        console.log('Received values of form: ', values);
+                    }
+                });
+            },
+        },
+    };
+    var app = new Vue(Main).$mount('#app')
+</script>
+</body>
+</html>
