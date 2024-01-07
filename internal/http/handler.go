@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"test-idp/internal/config"
 	"test-idp/internal/http/openid/handler/configuration"
+	"test-idp/internal/http/openid/handler/process_login"
 	"test-idp/internal/http/status"
 )
 
@@ -23,4 +24,5 @@ func (h *Handler) InitRoutes() {
 	h.server.GET("/status", status.Handler)
 	h.server.GET("/auth/openid/.well-known/openid-configuration", configuration.Init(h.cnf).Handle)
 	h.server.File("/auth/login", "web/pages/login_page.html")
+	h.server.POST("/auth/login", process_login.Handle)
 }
